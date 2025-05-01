@@ -84,8 +84,6 @@ void loop() {
   y = analogRead(JOY_L_Y_PIN); // Read joystick X-axis value
   message.x = map(x, 0, 4095, 0, 255); // Map to 0-255 range
   message.y = map(y, 0, 4095, 0, 255); // Map to 0-255 range
-  // Serial.printf("x=%d y=%d", message.x, message.y);
-  // Serial.println();
   
   send_message();
   delay(25);

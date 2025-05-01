@@ -86,11 +86,15 @@ reqval_t servo_pwm_reqval;
 
 hw_timer_t *timer = NULL;
 
+unsigned long lastCbTime = 0;
+#define COAP_TIMEOUT 500 // 1 second timeout for CoAP response
+
 // ===== VELOCITY CALLBACK ===== //
 void cmdVel_cb()
 {
     esc_pwm_reqval.target_val = map(message.y, 0, 255, MIN_ALLOWABLE_SPEED, MAX_ALLOWABLE_SPEED);
     servo_pwm_reqval.target_val = map(message.x, 0, 255, 10, 170);
+    lastCbTime = millis(); // Update the last callback time
 }
 
 #define servo_offset -25
@@ -98,6 +102,13 @@ void cmdVel_cb()
 // ===== PWM UPDATE ===== //
 void update_val()
 {
+    // Check if the CoAP message was received within the timeout period
+    if (millis() - lastCbTime > COAP_TIMEOUT)
+    {
+        esc_pwm_reqval.target_val = esc_pwm_reqval.no_val;
+        servo_pwm_reqval.target_val = servo_pwm_reqval.no_val;
+    }
+
     if (esc_pwm_reqval.curr_val != esc_pwm_reqval.target_val)
     {
         esc_pwm_reqval.curr_val += (esc_pwm_reqval.curr_val > esc_pwm_reqval.target_val) ? -esc_pwm_reqval.rateOfChange : esc_pwm_reqval.rateOfChange;
