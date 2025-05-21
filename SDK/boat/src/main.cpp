@@ -20,6 +20,10 @@ uint8_t boatID = 0xFF;
 #define THRUSTER_ESC_PIN (10)
 #define STEERING_SERVO_PIN (9)
 
+// servo offset
+// #define servo_offset -25
+#define servo_offset 0
+
 #define MIN_SPEED 1100
 // #define MIN_ALLOWABLE_SPEED MIN_SPEED
 #define MIN_ALLOWABLE_SPEED 1350
@@ -96,8 +100,6 @@ void cmdVel_cb()
     servo_pwm_reqval.target_val = map(message.x, 0, 255, 10, 170);
     lastCbTime = millis(); // Update the last callback time
 }
-
-#define servo_offset -25
 
 // ===== PWM UPDATE ===== //
 void update_val()
