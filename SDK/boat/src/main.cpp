@@ -11,7 +11,9 @@
 #include <ESP32Servo.h>
 #include "ESC.h"
 
-const uint8_t BOATIDSEL_PINS[] = {39, 40, 41, 42, 02, 01};
+// reversed ID
+const uint8_t BOATIDSEL_PINS[] = {01, 02, 42, 41, 40 ,39};
+// const uint8_t BOATIDSEL_PINS[] = {39, 40, 41, 42, 02, 01};
 uint8_t boatID = 0xFF;
 
 // ===== CONFIG SECTION (cfg.h) ===== //
