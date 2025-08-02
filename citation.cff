@@ -1,0 +1,21 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Mecatron EduBoat
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Scott Jia Xu
+    family-names: Cheng
+    email: scottcjx.w@gmail.com
+    affiliation: Mecatron
+    orcid: 'https://orcid.org/0009-0007-3541-443X'
+identifiers:
+  - type: url
+    value: 'https://github.com/NTU-Mecatron/EduBoat-Workshop'
+    description: Github
+repository-code: 'https://github.com/NTU-Mecatron/EduBoat-Workshop'
+license: GPL-3.0-or-later
