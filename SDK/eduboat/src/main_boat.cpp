@@ -1,60 +1,42 @@
-
 /**
- * @file main_combined.cpp
- * @brief Integrated sketch: CoAP server, motor + servo control, and config
+ * @file main_boat.cpp
+ * @author Scott CJX (you@domain.com)
+ * @brief 
+ * @version 0.1
+ * @date 2025-08-02
+ * 
+ * @copyright Copyright (c) 2025
+ * 
  */
 
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WiFiUdp.h>
 #include <coap-simple.h>
-#include <MsgPack.h>
 #include <ESP32Servo.h>
 #include "ESC.h"
 
-// reversed ID
-const uint8_t BOATIDSEL_PINS[] = {01, 02, 42, 41, 40 ,39};
-// const uint8_t BOATIDSEL_PINS[] = {39, 40, 41, 42, 02, 01};
+#include "cfg.h"
+#include "boat_cfg.h"
+
 uint8_t boatID = 0xFF;
-
-// ===== CONFIG SECTION (cfg.h) ===== //
-#define AP_CHANNEL 1
-
-#define THRUSTER_ESC_PIN (10)
-#define STEERING_SERVO_PIN (9)
-
-// servo offset
-// #define servo_offset -25
-#define servo_offset 0
-
-#define MIN_SPEED 1100
-// #define MIN_ALLOWABLE_SPEED MIN_SPEED
-#define MIN_ALLOWABLE_SPEED 1350
-#define MAX_SPEED 1900
-// #define MAX_ALLOWABLE_SPEED MAX_SPEED
-#define MAX_ALLOWABLE_SPEED 1650
-#define STOP_SPEED 1500
-
 char AP_SSID[16];
 char AP_PASSWORD[16];
 
-typedef struct reqval_t
-{
-    uint16_t target_val;
-    uint16_t curr_val;
-    uint16_t min_val;
-    uint16_t no_val;
-    uint16_t max_val;
-    uint16_t rateOfChange;
-} reqval_t;
+WiFiUDP udp;
+Coap coap(udp);
+MsgPack::Unpacker unpacker;
 
-static struct Message
-{
-    uint8_t x;
-    uint8_t y;
+Servo steeringServo;
+ESC thrusterEsc(THRUSTER_ESC_PIN, MIN_SPEED, MAX_SPEED, STOP_SPEED);
 
-    MSGPACK_DEFINE(x, y);
-} message;
+reqval_t esc_pwm_reqval;
+reqval_t servo_pwm_reqval;
+
+hw_timer_t *timer = NULL;
+
+unsigned long lastCbTime = 0;
+#define COAP_TIMEOUT 500
 
 void setBoatID()
 {
@@ -80,23 +62,6 @@ void setWifi()
     Serial.println(WiFi.softAPIP());
 }
 
-// ===== GLOBAL VARIABLES ===== //
-WiFiUDP udp;
-Coap coap(udp);
-MsgPack::Unpacker unpacker;
-
-Servo steeringServo;
-ESC thrusterEsc(THRUSTER_ESC_PIN, MIN_SPEED, MAX_SPEED, STOP_SPEED);
-
-reqval_t esc_pwm_reqval;
-reqval_t servo_pwm_reqval;
-
-hw_timer_t *timer = NULL;
-
-unsigned long lastCbTime = 0;
-#define COAP_TIMEOUT 500 // 1 second timeout for CoAP response
-
-// ===== VELOCITY CALLBACK ===== //
 void cmdVel_cb()
 {
     esc_pwm_reqval.target_val = map(message.y, 0, 255, MIN_ALLOWABLE_SPEED, MAX_ALLOWABLE_SPEED);
@@ -128,15 +93,14 @@ void update_val()
 
         if (diff > 2 * servo_pwm_reqval.rateOfChange)
         {
-            servo_pwm_reqval.curr_val += (servo_pwm_reqval.curr_val > servo_pwm_reqval.target_val) 
-                ? -servo_pwm_reqval.rateOfChange 
-                : servo_pwm_reqval.rateOfChange;
+            servo_pwm_reqval.curr_val += (servo_pwm_reqval.curr_val > servo_pwm_reqval.target_val)
+                                             ? -servo_pwm_reqval.rateOfChange
+                                             : servo_pwm_reqval.rateOfChange;
 
             servo_pwm_reqval.curr_val = constrain(
                 servo_pwm_reqval.curr_val,
                 servo_pwm_reqval.min_val,
-                servo_pwm_reqval.max_val
-            );
+                servo_pwm_reqval.max_val);
         }
     }
 
@@ -145,8 +109,7 @@ void update_val()
     servo_output = constrain(
         servo_pwm_reqval.curr_val + servo_offset,
         servo_pwm_reqval.min_val,
-        servo_pwm_reqval.max_val
-    );
+        servo_pwm_reqval.max_val);
 
     steeringServo.write(servo_output);
 }
@@ -188,7 +151,6 @@ void setup()
     setBoatID();
     Serial.printf("Boat ID: %d\r\n", boatID);
 
-    // esc_pwm_reqval = {STOP_SPEED, STOP_SPEED, MIN_SPEED, STOP_SPEED, MAX_SPEED, 50};
     esc_pwm_reqval = {STOP_SPEED, STOP_SPEED, MIN_SPEED, STOP_SPEED, MAX_SPEED, 10};
     servo_pwm_reqval = {90, 90, 0, 90, 180, 5};
 
