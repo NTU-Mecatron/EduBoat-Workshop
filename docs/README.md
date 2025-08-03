@@ -25,11 +25,6 @@ The onboard EduBoat controller is based on the **ESP32**, programmed to receive 
 
 ---
 
-
-## Citation
-If you use this repository in your research or educational material, please cite it using the [`CITATION.cff`](../CITATION.cff) file provided. GitHub automatically extracts citation metadata, which can also be accessed using the “**Cite this repository**” button on the GitHub page.
-
-
 ## Acknowledgements
 This project was developed by the [@NTU-Mecatron](https://github.com/NTU-Mecatron) team. Special thanks to student contributors and teaching assistants who made the **EduBoat Workshop** possible.
 
@@ -70,3 +65,5 @@ If you intend to use this project for your own **research**, **educational deliv
 
 We value open-source contribution, but also recognize the efforts and resources invested in this platform. Help us ensure responsible reuse and attribution.
 
+## Citation
+If you use this repository in your research or educational material, please cite it using the [`CITATION.cff`](../citation.cff) file provided. GitHub automatically extracts citation metadata, which can also be accessed using the “**Cite this repository**” button on the GitHub page.

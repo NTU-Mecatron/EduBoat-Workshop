@@ -2,28 +2,53 @@
 # Visit https://bit.ly/cffinit to generate yours today!
 
 cff-version: 1.2.0
-title: "Mecatron EduBoat: An Open Source Hardware/Software Boat"
+title: 'Mecatron EduBoat: An Open Source Hardware/Software Boat'
 message: >-
   If you use this software, please cite it using the
   metadata from this file.
 type: software
 authors:
+  - name: Mecatron
+    city: Singapore
+    country: SG
   - given-names: Scott Jia Xu
     family-names: Cheng
     email: scottcjx.w@gmail.com
     affiliation: Mecatron
     orcid: 'https://orcid.org/0009-0007-3541-443X'
+  - given-names: Zach
+    family-names: Low
+    affiliation: Mecatron
+  - given-names: Timothy
+    affiliation: Mecatron
+  - given-names: Nicole
+    affiliation: Mecatron
+  - given-names: Joowan
+    affiliation: Mecatron
+  - given-names: Yingzhan
+    affiliation: Mecatron
+  - given-names: Yongzhan
+    affiliation: Mecatron
 identifiers:
   - type: url
-    value: "https://github.com/NTU-Mecatron/EduBoat-Workshop"
+    value: 'https://github.com/NTU-Mecatron/EduBoat-Workshop'
     description: Github
+repository-code: 'https://github.com/NTU-Mecatron/EduBoat-Workshop'
+abstract: >
+  This project combines a software stack licensed under GNU
+  GPLv3 and hardware designs licensed under CERN-OHL-S v2.0.
+  The software controls and interfaces with a custom-built
+  robotic system, while the hardware includes schematics and
+  PCB designs intended for  replication and further
+  development under open hardware principles.
 keywords:
   - GPLv3
   - CERN-OHL-S
-repository-code: "https://github.com/NTU-Mecatron/EduBoat-Workshop"
-license: "GPL-3.0-or-later AND CERN-OHL-S-2.0"
-abstract: >
-  This project combines a software stack licensed under GNU GPLv3 and hardware designs
-  licensed under CERN-OHL-S v2.0. The software controls and interfaces with a custom-built
-  robotic system, while the hardware includes schematics and PCB designs intended for 
-  replication and further development under open hardware principles.
+  - Boat
+  - Education
+  - Maritime
+  - Arduino
+  - PCB
+  - Robotics
+  - IoT
+license: GPL-3.0-or-later AND CERN-OHL-S-2.0
